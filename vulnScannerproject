@@ -1,0 +1,49 @@
+import socket                                         
+# importing socket module
+
+
+def retBanner(ip, port):   
+    try:
+        # after 5 sec the time would be out for the connection
+        socket.setdefaulttimeout(5)
+        s = socket.socket()  # generating a socket
+        s.connect((ip, port))  # taking the parameters as tupel
+        banner = s.recv(1024)   
+        return banner.decode('utf-8')
+    except:
+        return
+
+
+def checkVulns(banner):  
+    if 'FreeFloat Ftp Server (Version 1.00)' in banner:
+        print('[+] FreeFloat FTP Server is vulnerable')
+    elif '3Co 3CDaemon FTP Server Version 2.0' in banner:
+        print('[+] 3CDaemon FTP Server is vulnerable')
+    elif 'Ability Server 2.34' in banner:
+        print('[+] Ability FTP Server is vulnerable ')
+    elif ('Sami FTP Server 2.0.2' in banner):
+        print('[+] Sami FTP Server is vulnerable')
+    else:
+        print('[-] FTP Server is not vulnerable ')
+    return
+
+
+def main():
+
+    ip1 = input("Enter the first ip:")
+    ip2 = input("Enter second ip:")
+    port = input("Enter the port:")
+    banner1 = retBanner(ip1, port)
+    if banner1:  # The [+] is a symbol that is commonly used in output messages to
+        # indicate a positive or successful result. In this context,
+        #  it is used to indicate that the FTP server being scanned has been found to be vulnerable. It could be replaced with other symbols or text, depending on the preference of the programmer or the specific output formatting used.
+        print('[+] ' + ip1 + ':' + banner1.strip('\n'))
+        checkVulns(banner1)
+    banner2 = retBanner(ip2, port)
+    if banner2:
+        print('[+]' + ip2 + banner2.strip('\n'))
+        checkVulns(banner2)
+
+
+if __name__ == '__main__':
+    main()
